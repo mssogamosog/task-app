@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Task = require('../models/task');
+
 const userSchema = new mongoose.Schema({
   name:{
     type: String,
@@ -60,6 +61,7 @@ userSchema.methods.toJSON = function() {
   const userObject = user.toObject();
   delete userObject.password;
   delete userObject.tokens;
+  delete userObject.avatar;
   return userObject;
 }
 
@@ -78,7 +80,7 @@ userSchema.statics.findByCredentials = async (email,password) => {
 
 userSchema.methods.generateToken = async function(){
   const user = this;
-  const token = jwt.sign({_id: user._id},'sdfadfad',{expiresIn: '8 d'});
+  const token = jwt.sign({_id: user._id},process.env.JWT_SECRET,{expiresIn: '8 d'});
   user.tokens = user.tokens.concat({token});
   await user.save();
   return token;

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-mongoose.connect('mongodb://localhost:27017/tasks-manager-api', {
+mongoose.connect(process.env.MONGO_URL, {
   useCreateIndex:true,
   useNewUrlParser:true,
   validateOptions:true
